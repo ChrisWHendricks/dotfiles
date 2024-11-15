@@ -51,7 +51,7 @@
 [init]
 	defaultBranch = main
 [user]
-	name = Phil Haack
-	email = haacked@gmail.com
+	name = Chris Hendricks
+	email = hendricks.chris78@gmail.com
 [credential "https://dev.azure.com"]
 	useHttpPath = true
