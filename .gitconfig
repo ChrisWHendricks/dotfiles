@@ -1,0 +1,29 @@
+[user]
+    name = Chris W Hendricks
+    email = <email>
+
+[core]
+    editor = nano
+    excludesfile = ~/.gitignore_global
+    autocrlf = input
+
+[color]
+    ui = auto
+
+[alias]
+    st = status
+    ci = commit
+    co = checkout
+    br = branch
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    unstage = reset HEAD --
+    last = log -1 HEAD
+
+[pull]
+    rebase = false
+
+[init]
+    defaultBranch = main
+
+[include]
+    path = ~/.gitconfig.local
