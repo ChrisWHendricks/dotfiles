@@ -1,6 +1,0 @@
-{
-    "terminal.integrated.tabs.defaultColor": "terminal.ansiBlack",
-    "terminal.integrated.minimumContrastRatio": 1,
-    "window.autoDetectColorScheme": false,
-    "workbench.colorTheme": "GitHub Dark (Web Based)"
-}
