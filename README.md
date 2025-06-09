@@ -5,8 +5,8 @@ My personal dotfiles for macOS development environment.
 ## Installation
 
 ```bash
-git clone https://github.com/username/dotfiles.git
-cd dotfiles
+git clone https://github.com/username/dotfiles.git ~/.dotfiles
+cd ~/dotfiles
 ./install.sh
 ```
 
