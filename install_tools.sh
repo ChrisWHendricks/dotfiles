@@ -48,7 +48,6 @@ brew install --cask \
 
 # Install Nerd Fonts
 echo "Installing Nerd Fonts..."
-brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font font-fira-code-nerd-font font-jetbrains-mono-nerd-font
 
 echo "Tools installation complete!"
