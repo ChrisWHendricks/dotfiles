@@ -9,4 +9,15 @@ fi
 # yeah, let's do that.
 
 echo "› sudo softwareupdate -i -a -- Not sure I want to do this yet so actual command is commented out"
-#sudo softwareupdate -i -a
+sudo softwareupdate -i -a
+
+# Define info function
+function info() {
+  echo "-> $1"
+}
+
+# Install from Brewfile if on macOS
+if test "$(uname)" = "Darwin"; then
+  info "Installing applications from Brewfile..."
+  brew bundle --file=$HOME/.dotfiles/macos/Brewfile
+fi

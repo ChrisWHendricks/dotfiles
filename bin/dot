@@ -46,15 +46,17 @@ done
 
 export ZSH=$HOME/.dotfiles
 
-# Set macOS defaults
-#$ZSH/macos/set-defaults.sh
+# Install Homebrew if DARWIN OR LINUX
+if [ "$(uname -s)" == "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" == "Linux" ] ; then
+	$ZSH/homebrew/install.sh > /dev/null 2>&1
+	brew update
+else
+	echo "› Skipping Homebrew installation"
+fi
 
-# Install homebrew
-info "Install Apps = $INSTALL_APPS"
-$ZSH/homebrew/install.sh $INSTALL_APPS > /dev/null 2>&1
-
-# Upgrade homebrew
-brew update
+if [ "$(uname -s)" == "Darwin" ] ; then
+	$ZSH/macos/set-defaults.sh
+fi
 
 # Install software
 echo "› $ZSH/script/install"

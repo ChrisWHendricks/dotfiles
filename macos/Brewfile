@@ -1,0 +1,30 @@
+# CLI tools
+brew "gh"
+brew "go"
+brew "zsh"
+brew "ngrok"
+brew "nvm"
+brew "openssl"
+brew "readline"
+brew "sqlite3"
+brew "zlib"
+brew "ruby-install"
+brew "rbenv"
+brew "xz"
+
+# Applications
+cask "iterm2"
+cask "visual-studio-code"
+cask "google-chrome"
+cask "github-desktop"
+cask "onedrive"
+cask "powershell"
+cask "google-drive"
+cask "postman"
+cask "rectangle"
+cask "alfred"
+
+# Fonts
+cask "font-hack-nerd-font"
+cask "font-fira-code-nerd-font"
+cask "font-jetbrains-mono-nerd-font"

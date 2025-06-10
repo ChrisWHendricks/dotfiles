@@ -3,21 +3,10 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Theme
-ZSH_THEME="fino-time"
-# agnoster
-# duellj
-# eastwood
-# fino-time
-# lukerandall
-# mortalscumbag
-# random
-# rkj-repos
-# xiong-chiamiov-plus
-#robbyrussell
+# oh-my-zsh theme
+ZSH_THEME="robbyrussell"
 
-
-# Plugins
+# oh-my-zsh plugins
 plugins=(
   git
   macos
@@ -27,35 +16,40 @@ plugins=(
   vscode
 )
 
-# This Starts Oh My Zsh
+# Source the oh-my-zsh script to start using it
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
+# Add local paths to the Path variable.  
+# Necessary because some programs (like poetry) can get installed to 
+# a local path
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
 
 # Preferred editor for local and remote sessions
 export EDITOR='code --wait'
 
-# Github Config Related Exports
+# These exports allow my dotfiles repo to be installed in vs code dev containerd
 export GITHUB_AUTHOR_NAME='Chris W Hendricks'
 export GITHUB_AUTHOR_EMAIL='chris.hendricks@tylertech.com'
+export DOTFILES_REPO="https://github.com/ChrisWHendricks/dotfiles"
 
 # Aliases
 alias zshconfig="$EDITOR ~/.zshrc"
 alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
-alias ls="ls -G"
-alias ll="ls -la"
-alias g="git"
-alias gs="git status"
-alias gc="git commit"
-alias gp="git push"
 alias codehome="code ~"
 alias codesrc="code ~/src"
-alias rz="source ~/.zshrc"
+alias rz="exec zsh" # reload the shell
+alias c="clear"     
+alias cls="clear"   # Too many years on windows and I still type cls sometimes
 
-export DOTFILES_REPO="https://github.com/ChrisWHendricks/dotfiles"
-export DOTFILES_BRANCH="dev"
-
+# I reference this site so much that I created an alias for open it.
+# Use the appropriate open command based on OS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # macOS
+  alias botodocs='open "https://boto3.amazonaws.com/v1/documentation/api/latest/index.html"'
+else
+  # Linux and others
+  alias botodocs='xdg-open "https://boto3.amazonaws.com/v1/documentation/api/latest/index.html"'
+fi
 
 # Custom functions
 function mkcd() {
@@ -64,3 +58,12 @@ function mkcd() {
 
 # Load local config if it exists
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# This Starts Oh My Zsh
+# Must call this after sourcing local config in case the local config
+# needs to override the theme.
+
+
+echo "Loaded Chris W Hendricks's .zshrc"
+echo "Loaded $ZSH_THEME theme"
+
