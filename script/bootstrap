@@ -8,8 +8,6 @@ DOTFILES_DIR=$(pwd -P)
 #DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d%H%M%S)"
 
-
-
 # Make only script files executable
 find . -type f \( -name "*.sh" -o -name "*.bash" -o -name "*.zsh" \) -exec chmod +x {} \;
 
@@ -47,7 +45,6 @@ success "Dotfiles Directory $DOTFILES_DIR"
 install_dotfiles() {
     echo ''
     echo '⚡️ Installing Dotfiles'
-    
 
     local overwrite_all=false backup_all=false skip_all=false
 
@@ -88,8 +85,6 @@ setup_gitconfig() {
         success "Github Author Name: $git_authorname"
         success "Github Author Email: $git_authoremail"
 
- 
-
         sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.template >git/gitconfig.local.symlink
 
         success 'gitconfig'
@@ -123,7 +118,7 @@ link_file() {
 # Function to unlink a file
 unlink_file() {
     local dest="$1"
-    
+
     if [ -L "$dest" ]; then
         echo "Unlinking $dest"
         rm "$dest"
@@ -138,13 +133,11 @@ unlink_file() {
 setup_gitconfig
 install_dotfiles
 
-  if source bin/dot | while read -r data; do info "$data"; done
-  then
+if source bin/dot | while read -r data; do info "$data"; done; then
     success "dependencies installed"
-  else
+else
     fail "error installing dependencies"
-
-
+fi
 
 # If we're on a Mac, let's install and setup homebrew.
 # if [ "$(uname -s)" == "Darwin" ]
