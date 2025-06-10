@@ -20,8 +20,7 @@ if test ! $(which brew); then
   elif test "$(expr substr $(uname -s) 1 5)" = "Linux"; then
     echo "Installing Linux Brew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >>/home/vscode/.zshrc.local
+    eval "$(/home/linuxbrew/.linuxbrew/Homebrew/bin/brew shellenv)"
   fi
 fi
-
-
-
