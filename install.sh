@@ -59,5 +59,11 @@ if [ -d "$VSCODE_DIR" ]; then
     link_file "$DOTFILES_DIR/vscode/settings.json" "$VSCODE_DIR/settings.json"
 fi
 
-echo "Dotfiles installation complete!"
-echo "If you want to install additional tools, run: ./install_tools.sh"
+NOW=$(date +"%Y-%m-%d %H:%M:%S")
+echo "Completed dotfiles installation at $NOW" >> "$HOME/.dotfiles_installation.log"
+echo "Backup directory: $BACKUP_DIR" >> "$HOME/.dotfiles_installation.log"
+echo "Dotfiles directory: $DOTFILES_DIR" >> "$HOME/.dotfiles_installation.log"
+echo "Dotfiles installation complete!" >> "$HOME/.dotfiles_installation.log"
+echo "If you want to install additional tools, run: ./install_tools.sh" >> "$HOME/.dotfiles_installation.log"
+
+cat "$HOME/.dotfiles_installation.log"
