@@ -33,6 +33,13 @@ alias g="git"
 alias gs="git status"
 alias gc="git commit"
 alias gp="git push"
+alias codehome="code ~"
+alias codesrc="code ~/src"
+alias rz="source ~/.zshrc"
+
+export DOTFILES_REPO="https://github.com/ChrisWHendricks/dotfiles"
+export DOTFILES_BRANCH="dev"
+
 
 # Custom functions
 function mkcd() {

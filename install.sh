@@ -59,7 +59,5 @@ if [ -d "$VSCODE_DIR" ]; then
     link_file "$DOTFILES_DIR/vscode/settings.json" "$VSCODE_DIR/settings.json"
 fi
 
-echo "Installing Dev Tools"
-./install_tools.sh
-
 echo "Dotfiles installation complete!"
+echo "If you want to install additional tools, run: ./install_tools.sh"
