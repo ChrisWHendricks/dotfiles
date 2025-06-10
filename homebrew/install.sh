@@ -5,6 +5,13 @@
 # This installs some of the common dependencies needed (or at least desired)
 # using Homebrew.
 
+install_apps=$1 
+
+  if [[ x"$OS" == x"Windows" ]]; then
+    echo "Windows not currently supported, because I don't use windows very often.  Linux > Mac > Windows. (a.k.a Windows Sucks)"
+    exit 0
+  fi
+
 # Check for Homebrew
 if test ! $(which brew)
 then
@@ -18,7 +25,6 @@ then
   then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
   fi
-
 fi
 
 function install() {
@@ -46,9 +52,18 @@ cat << EOF
 EOF
 }
 
-echo "Software Install Temporairly disabled"
-exit 0
+# Always Install Nerd Fonts
+info "Installing Nerd Fonts..."
+brew install --cask font-hack-nerd-font font-fira-code-nerd-font font-jetbrains-mono-nerd-font
 
+
+# if not install-apps then exit
+if [[ x"$install_apps" != x"yes" ]]; then
+  echo "install-apps is not set to yes, skipping..."
+  exit 0
+fi
+
+info "Installing Homebrew apps..."
 install gh
 install go
 install iterm2 yes
@@ -72,14 +87,6 @@ install rbenv
 install xz
 install rectangle yes
 install alfred yes
-
-# Install Nerd Fonts
-echo "Installing Nerd Fonts..."
-brew install --cask font-hack-nerd-font font-fira-code-nerd-font font-jetbrains-mono-nerd-font
-
-
-
-
 
 # Install Rust
 # Not using Rust right now so not installing

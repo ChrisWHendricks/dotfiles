@@ -149,6 +149,9 @@ then
   else
     fail "error installing dependencies"
   fi
+else
+    echo ''
+    echo '⚡️ Skipping Macos Dependencies'
 fi
 
 

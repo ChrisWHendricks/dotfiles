@@ -1,0 +1,14 @@
+Created Backup Directory /Users/chris.hendricks/.dotfiles_backup/20250610133755
+Dotfiles Directory /Users/chris.hendricks/.dotfiles
+gitconfig already exists
+/Users/chris.hendricks/.zshrc already linked correctly
+/Users/chris.hendricks/.gitconfig already linked correctly
+/Users/chris.hendricks/.gitconfig.aliases already linked correctly
+/Users/chris.hendricks/.gitconfig.local already linked correctly
+dotfiles installed
+Install Apps = no
+ [ [00;34m..[0m ] Install Apps = no
+Already up-to-date.
+› /Users/chris.hendricks/.dotfiles/script/install
+› sudo softwareupdate -i -a -- Not sure I want to do this yet so actual command is commented out
+dependencies installed

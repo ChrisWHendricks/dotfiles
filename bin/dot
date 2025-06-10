@@ -11,6 +11,7 @@ set -e
 
 parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
+INSTALL_APPS='no'
 
 displayUsageAndExit() {
 	echo "dot -- dotfiles management"
@@ -32,6 +33,9 @@ while test $# -gt 0; do
 			exec "$EDITOR" "$dotfilesDirectory"
 			exit
 			;;
+		"-i"|"--install-apps")
+			INSTALL_APPS='yes'
+			;;
 		*)
 			echo "Invalid option: $1"
 			displayUsageAndExit
@@ -43,10 +47,11 @@ done
 export ZSH=$HOME/.dotfiles
 
 # Set macOS defaults
-$ZSH/macos/set-defaults.sh
+#$ZSH/macos/set-defaults.sh
 
 # Install homebrew
-#$ZSH/homebrew/install.sh 2>&1
+info "Install Apps = $INSTALL_APPS"
+$ZSH/homebrew/install.sh $INSTALL_APPS > /dev/null 2>&1
 
 # Upgrade homebrew
 brew update
