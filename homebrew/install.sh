@@ -18,7 +18,8 @@ if test ! $(which brew); then
   if test "$(uname)" = "Darwin"; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   elif test "$(expr substr $(uname -s) 1 5)" = "Linux"; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo "Installing Linux Brew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
   fi
 fi
 
