@@ -22,10 +22,8 @@ if test ! $(which brew); then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
    
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/vscode/.bashrc
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/vscode/.zshrc.local
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    brew install gcc
-
-    
+    success "Homebrew Installed"
   fi
 fi
