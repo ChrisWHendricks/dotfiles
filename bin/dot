@@ -47,8 +47,9 @@ done
 export ZSH=$HOME/.dotfiles
 
 # Install Homebrew if DARWIN OR LINUX
+echo "› $ZSH/homebrew/install.sh"
 if [ "$(uname -s)" == "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" == "Linux" ] ; then
-	$ZSH/homebrew/install.sh > /dev/null 2>&1
+	$ZSH/homebrew/install.sh #> /dev/null 2>&1
 	brew update
 else
 	echo "› Skipping Homebrew installation"

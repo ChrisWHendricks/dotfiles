@@ -133,6 +133,8 @@ unlink_file() {
 setup_gitconfig
 install_dotfiles
 
+echo ''
+echo '⚡️ Installing Dependencies'
 if source bin/dot | while read -r data; do info "$data"; done; then
     success "dependencies installed"
 else
