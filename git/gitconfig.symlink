@@ -1,0 +1,56 @@
+# Local/private config goes in the include
+[include]
+        path = ~/.gitconfig.local
+        path = ~/.gitconfig.aliases
+
+[color]
+        diff = auto
+        status = auto
+        branch = auto
+        ui = true
+
+[credential]
+        helper = osxkeychain
+        helper = /usr/local/share/gcm-core/git-credential-manager
+
+[difftool]
+        prompt = false
+
+[filter "lfs"]
+        clean = git-lfs clean -- %f
+        smudge = git-lfs smudge -- %f
+        process = git-lfs filter-process
+        required = true
+
+[mergetool]
+        keepBackup = false
+
+[pager]
+        branch = false
+
+[push]
+        # See `git help config` (search for push.default)
+        # for more information on different options of the below setting.
+        #
+        # Setting to git 2.0 default to suppress warning message
+        default = simple
+
+[rerere]
+        enabled = true
+
+[pull]
+        rebase = true
+
+[rebase]
+        autostash = true
+        autosquash = true
+
+[core]
+        editor = code --wait
+
+[init]
+        defaultBranch = main
+
+[user]
+        name = Chris W Hendricks
+        email = chris.hendricks@tylertech.com

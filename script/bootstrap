@@ -1,0 +1,188 @@
+#!/bin/bash
+
+# Chris W Hendricks's dotfiles installer
+
+set -e
+cd "$(dirname "$0")/.."
+DOTFILES_DIR=$(pwd -P)
+#DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d%H%M%S)"
+
+
+
+# Make only script files executable
+find . -type f \( -name "*.sh" -o -name "*.bash" -o -name "*.zsh" \) -exec chmod +x {} \;
+
+echo ''
+
+# Logging functions to make messages pretty
+info() {
+    printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+}
+
+user() {
+    printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+}
+
+success() {
+    printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+}
+
+fail() {
+    printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+    echo ''
+    exit
+}
+
+# Create backup directory
+echo '⚡️ Initializing Directories'
+mkdir -p "$BACKUP_DIR"
+success "Created Backup Directory $BACKUP_DIR"
+success "Dotfiles Directory $DOTFILES_DIR"
+
+install_dotfiles() {
+    echo ''
+    echo '⚡️ Installing Dotfiles'
+    
+
+    local overwrite_all=false backup_all=false skip_all=false
+
+    for src in $(find -H "$DOTFILES_DIR" -maxdepth 2 -name '*.symlink' -not -path '*.git*'); do
+        dst="$HOME/.$(basename "${src%.*}")"
+        link_file "$src" "$dst"
+    done
+
+    success "dotfiles installed"
+    echo ''
+}
+
+setup_gitconfig() {
+    echo ''
+    echo '⚡️ Setting up gitconfig'
+
+    if ! [ -f git/gitconfig.local.symlink ]; then
+        info 'setup gitconfig'
+
+        git_credential='cache'
+        if [ "$(uname -s)" == "Darwin" ]; then
+            git_credential='osxkeychain'
+        fi
+
+        git_authorname=$GITHUB_AUTHOR_NAME
+        git_authoremail=$GITHUB_AUTHOR_EMAIL
+
+        if [ -z "$git_authorname" ]; then
+            user ' - What is your github author name?'
+            read -e git_authorname
+        fi
+
+        if [ -z "$git_authoremail" ]; then
+            user ' - What is your github author email?'
+            read -e git_authoremail
+        fi
+
+        success "Github Author Name: $git_authorname"
+        success "Github Author Email: $git_authoremail"
+
+ 
+
+        sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.template >git/gitconfig.local.symlink
+
+        success 'gitconfig'
+    else
+        success "gitconfig already exists"
+    fi
+
+    echo ''
+}
+
+# Function to backup and link files
+link_file() {
+    local src="$1"
+    local dest="$2"
+
+    # Backup existing file if it exists and is not a symlink to our dotfiles
+    if [ -e "$dest" ] && [ ! -L "$dest" -o "$(readlink "$dest")" != "$src" ]; then
+        echo "Backing up $dest to $BACKUP_DIR/$(basename "$dest")"
+        mv "$dest" "$BACKUP_DIR/$(basename "$dest")"
+    fi
+
+    # Create symlink
+    if [ ! -e "$dest" ]; then
+        info "Linking $src to $dest"
+        ln -sf "$src" "$dest"
+    else
+        success "$dest already linked correctly"
+    fi
+}
+
+# Function to unlink a file
+unlink_file() {
+    local dest="$1"
+    
+    if [ -L "$dest" ]; then
+        echo "Unlinking $dest"
+        rm "$dest"
+        success "Removed symlink: $dest"
+    elif [ -e "$dest" ]; then
+        fail "$dest exists but is not a symlink"
+    else
+        info "$dest does not exist"
+    fi
+}
+
+setup_gitconfig
+install_dotfiles
+
+# If we're on a Mac, let's install and setup homebrew.
+if [ "$(uname -s)" == "Darwin" ]
+then
+    echo ''
+    echo '⚡️ Installing Macos Dependencies'
+  if source bin/dot | while read -r data; do info "$data"; done
+  then
+    success "dependencies installed"
+  else
+    fail "error installing dependencies"
+  fi
+fi
+
+
+echo ''
+echo '  All installed! Run source ~/.zshrc to reload your shell'
+
+# # Link dotfiles to home directory
+# link_file "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+# link_file "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
+# link_file "$DOTFILES_DIR/.gitignore_global" "$HOME/.gitignore_global"
+# link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
+
+# # Create src directory if it doesn't exist
+# SRC_DIR="$HOME/src"
+# mkdir -p "$SRC_DIR"
+
+# # Link dotfiles to src directory for easy editing
+# echo "Creating links in ~/src for easy editing..."
+# link_file "$DOTFILES_DIR/.zshrc" "$SRC_DIR/.zshrc"
+# link_file "$DOTFILES_DIR/.bashrc" "$SRC_DIR/.bashrc"
+# link_file "$DOTFILES_DIR/.bash_profile" "$SRC_DIR/.bash_profile"
+# link_file "$DOTFILES_DIR/.gitconfig" "$SRC_DIR/.gitconfig"
+# link_file "$DOTFILES_DIR/.gitignore_global" "$SRC_DIR/.gitignore_global"
+# link_file "$DOTFILES_DIR/.tmux.conf" "$SRC_DIR/.tmux.conf"
+
+# # Link VS Code settings if VS Code is installed
+# VSCODE_DIR="$HOME/Library/Application Support/Code/User"
+# if [ -d "$VSCODE_DIR" ]; then
+#     echo "Linking VS Code settings"
+#     mkdir -p "$VSCODE_DIR"
+#     link_file "$DOTFILES_DIR/vscode/settings.json" "$VSCODE_DIR/settings.json"
+# fi
+
+# NOW=$(date +"%Y-%m-%d %H:%M:%S")
+# echo "Completed dotfiles installation at $NOW" >> "$HOME/.dotfiles_installation.log"
+# echo "Backup directory: $BACKUP_DIR" >> "$HOME/.dotfiles_installation.log"
+# echo "Dotfiles directory: $DOTFILES_DIR" >> "$HOME/.dotfiles_installation.log"
+# echo "Dotfiles installation complete!" >> "$HOME/.dotfiles_installation.log"
+# echo "If you want to install additional tools, run: ./install_tools.sh" >> "$HOME/.dotfiles_installation.log"
+
+# cat "$HOME/.dotfiles_installation.log"
