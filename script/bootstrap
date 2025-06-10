@@ -18,18 +18,22 @@ echo ''
 # Logging functions to make messages pretty
 info() {
     printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+    echo $1 >>$DOTFILES_DIR/install.log
 }
 
 user() {
     printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+    echo $1 >>$DOTFILES_DIR/install.log
 }
 
 success() {
     printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+    echo $1 >>$DOTFILES_DIR/install.log
 }
 
 fail() {
     printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+    echo $1 >>$DOTFILES_DIR/install.log
     echo ''
     exit
 }
