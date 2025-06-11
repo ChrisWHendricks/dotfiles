@@ -39,14 +39,14 @@ then
 fi
 
 # Install from appropriate Brewfile based on OS
-if test "$(uname)" = "Darwin"
-then
-  echo "  Installing macOS dependencies from Brewfile"
-  brew bundle --file=$HOME/.dotfiles/macos/Brewfile
-elif test "$(expr substr $(uname -s) 1 5)" = "Linux"
-then
-  echo "  Installing Linux dependencies from Brewfile"
-  brew bundle --file=$HOME/.dotfiles/linux/Brewfile
-fi
+# if test "$(uname)" = "Darwin"
+# then
+#   echo "  Installing macOS dependencies from Brewfile"
+#   brew bundle --file=$HOME/.dotfiles/macos/Brewfile
+# elif test "$(expr substr $(uname -s) 1 5)" = "Linux"
+# then
+#   echo "  Installing Linux dependencies from Brewfile"
+#   brew bundle --file=$HOME/.dotfiles/linux/Brewfile
+# fi
 
 exit 0

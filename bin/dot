@@ -9,8 +9,31 @@
 
 set -e
 
-parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
-dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
+# Logging functions to make messages pretty
+info() {
+    printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+    echo $1 >>$DOTFILES_DIR/install.log
+}
+
+user() {
+    printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+    echo $1 >>$DOTFILES_DIR/install.log
+}
+
+success() {
+    printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+    echo $1 >>$DOTFILES_DIR/install.log
+}
+
+fail() {
+    printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+    echo $1 >>$DOTFILES_DIR/install.log
+    echo ''
+    exit
+}
+
+parentDirectory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+dotfilesDirectory="$(cd "$(dirname "$parentDirectory")" && pwd -P)"
 
 export ZSH=$HOME/.dotfiles
 
@@ -20,10 +43,10 @@ displayUsageAndExit() {
 	echo "Usage: dot [options]"
 	echo ""
 	echo "Options:"
-	echo "  --bootstrap     Run the bootstrap script to set up dotfiles"
-	echo "  --homebrew      Install or update Homebrew"
-	echo "  --set-defaults  Set OS specific defaults"
-	echo "  --apps          Install/Update applications"
+	echo "  --config      	Configures file links, git, and custom zsh themes"    
+	echo "  --homebrew      Install or update Homebrew, an application and package manager"
+	echo "  --set-defaults  Set OS specific defaults. (Only works on Macs right now)"
+	echo "  --apps          Install/Update applications (Requires Homebrew to be installed)"
 	echo "  -e, --edit      Open dotfiles directory for editing"
 	echo "  -h, --help      Show this help message and exit"
 	echo ""
@@ -40,7 +63,7 @@ run_bootstrap() {
 # Function to install/update Homebrew
 install_homebrew() {
 	echo "› Installing/Updating Homebrew"
-	if [ "$(uname -s)" = "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" = "Linux" ] ; then
+	if [ "$(uname -s)" = "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" = "Linux" ]; then
 		$ZSH/homebrew/install.sh
 		brew update
 	else
@@ -51,7 +74,7 @@ install_homebrew() {
 # Function to set OS defaults
 set_defaults() {
 	echo "› Setting OS defaults"
-	if [ "$(uname -s)" = "Darwin" ] ; then
+	if [ "$(uname -s)" = "Darwin" ]; then
 		$ZSH/macos/set-defaults.sh
 	else
 		echo "› Skipping defaults (non-macOS system detected)"
@@ -60,8 +83,17 @@ set_defaults() {
 
 # Function to install applications
 install_apps() {
+	echo ''
+	echo '⚡️ Installing OS Specific Applications.'
+	success "OS is ${uname -s}"
+
+	if $ZSH/script/install | while read -r data; do info "$data"; done; then
+		success "dependencies installed"
+	else
+		fail "error installing dependencies"
+	fi
 	echo "› Installing/Updating applications"
-	$ZSH/script/install
+	
 }
 
 # If no arguments provided, show usage
@@ -72,30 +104,30 @@ fi
 # Process arguments
 while test $# -gt 0; do
 	case "$1" in
-		"--bootstrap")
-			run_bootstrap
-			;;
-		"--homebrew")
-			install_homebrew
-			;;
-		"--set-defaults")
-			set_defaults
-			;;
-		"--apps")
-			install_apps
-			;;
-		"-e"|"--edit")
-			#code --wait "$dotfilesDirectory"
-			$EDITOR "$dotfilesDirectory"
-			exit
-			;;
-		"-h"|"--help")
-			displayUsageAndExit
-			;;
-		*)
-			echo "Invalid option: $1"
-			displayUsageAndExit
-			;;
+	"--bootstrap")
+		run_bootstrap
+		;;
+	"--homebrew")
+		install_homebrew
+		;;
+	"--set-defaults")
+		set_defaults
+		;;
+	"--apps")
+		install_apps
+		;;
+	"-e" | "--edit")
+		#code --wait "$dotfilesDirectory"
+		$EDITOR "$dotfilesDirectory"
+		exit
+		;;
+	"-h" | "--help")
+		displayUsageAndExit
+		;;
+	*)
+		echo "Invalid option: $1"
+		displayUsageAndExit
+		;;
 	esac
 	shift
 done

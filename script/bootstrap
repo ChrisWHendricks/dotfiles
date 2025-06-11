@@ -5,7 +5,6 @@
 set -e
 cd "$(dirname "$0")/.."
 DOTFILES_DIR=$(pwd -P)
-#DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d%H%M%S)"
 
 # Make only script files executable
@@ -150,14 +149,6 @@ install_dotfiles
 install_zsh_themes
 
 echo ''
-echo '⚡️ Installing Dependencies'
-if $DOTFILES_DIR/bin/dot --homebrew --apps | while read -r data; do info "$data"; done; then
-    success "dependencies installed"
-else
-    fail "error installing dependencies"
-fi
-
-echo ''
-echo '  All installed! Run source ~/.zshrc to reload your shell'
+success "Dotfiles Installed Successfully"
 
 
