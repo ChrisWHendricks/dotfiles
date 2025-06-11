@@ -1,0 +1,15 @@
+# CLI tools for Linux
+brew "gh"
+brew "go"
+brew "zsh"
+brew "ngrok"
+brew "openssl"
+brew "readline"
+brew "sqlite3"
+brew "zlib"
+brew "ruby-install"
+brew "rbenv"
+brew "xz"
+
+# Skip casks as they're macOS-specific
+# Add Linux-specific packages if needed

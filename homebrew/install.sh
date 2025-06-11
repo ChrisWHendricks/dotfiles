@@ -5,25 +5,44 @@
 # This installs some of the common dependencies needed (or at least desired)
 # using Homebrew.
 
-if [[ x"$(uname)" == x"Windows" ]]; then
-  echo "Windows detected, skipping Homebrew install"
-  exit 0
-fi
-
 # Check for Homebrew
-if test ! $(which brew); then
+if test ! $(which brew)
+then
   echo "  Installing Homebrew for you."
 
   # Install the correct homebrew for each OS type
-  if test "$(uname)" = "Darwin"; then
+  if test "$(uname)" = "Darwin"
+  then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  elif test "$(expr substr $(uname -s) 1 5)" = "Linux"; then
-    echo "Installing Linux Brew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-
-   
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/vscode/.zshrc.local
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    success "Homebrew Installed"
+  elif test "$(expr substr $(uname -s) 1 5)" = "Linux"
+  then
+    # Handle the glibc warning by setting HOMEBREW_NO_AUTO_UPDATE
+    export HOMEBREW_NO_AUTO_UPDATE=1
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # Add Homebrew to PATH for Linux
+    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    
+    # Add to shell profile
+    if [ -f ~/.zshrc ]; then
+      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
+    fi
+    if [ -f ~/.bashrc ]; then
+      echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
+    fi
   fi
 fi
+
+# Install from appropriate Brewfile based on OS
+if test "$(uname)" = "Darwin"
+then
+  echo "  Installing macOS dependencies from Brewfile"
+  brew bundle --file=$HOME/.dotfiles/macos/Brewfile
+elif test "$(expr substr $(uname -s) 1 5)" = "Linux"
+then
+  echo "  Installing Linux dependencies from Brewfile"
+  brew bundle --file=$HOME/.dotfiles/linux/Brewfile
+fi
+
+exit 0
