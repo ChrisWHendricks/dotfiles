@@ -2,6 +2,17 @@
 
 My personal dotfiles for macOS and Linux development environments.
 
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Managing dotfiles](#managing-dotfiles)
+  - [Dotfiles CLI](#dotfiles-can-also-be-used-as-a-command-line)
+  - [Local customization](#local-customization)
+- [What's included](#whats-included)
+- [Features](#features)
+- [Additional Documentation](#additional-documentation)
+- [License](#license)
+
 ## Installation
 
 ```bash
@@ -59,6 +70,10 @@ If no options are provided, usage information is displayed.
 - Creates local git configuration with your personal details
 - Installs Homebrew and common development tools
 - Sets up macOS-specific preferences when on macOS
+
+## Additional Documentation
+- [Shell Aliases](./Aliases.md)
+- [Git Aliases](./GitAliases.md)
 
 ## License
 
