@@ -7,14 +7,15 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 
 # oh-my-zsh plugins
-plugins=(
-  git
-  macos
-  docker
-  npm
-  node
-  vscode
-)
+plugins=() # No Plugins by default
+# plugins=(
+#   git
+#   macos
+#   docker
+#   npm
+#   node
+#   vscode
+# )
 
 # Source the oh-my-zsh script to start using it
 source $ZSH/oh-my-zsh.sh

@@ -45,7 +45,3 @@
 
 [init]
         defaultBranch = main
-
-[user]
-        name = Chris W Hendricks
-        email = chris.hendricks@tylertech.com
