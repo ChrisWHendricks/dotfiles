@@ -18,6 +18,26 @@ cd ~/.dotfiles
 - **Unlink**: Run `./unlink.sh` to remove all symlinks created by the installer
 - **Edit**: Modify files directly in the `~/.dotfiles` directory, changes will be reflected in your home directory
 
+### Dotfiles can also be used as a command line
+After the initial install is completed, you can use dotfiles as a cli
+
+```bash
+$ dot -h
+dot -- dotfiles management
+
+Usage: dot [options]
+
+Options:
+  --bootstrap     Run the bootstrap script to set up dotfiles
+  --homebrew      Install or update Homebrew
+  --set-defaults  Set OS specific defaults
+  --apps          Install/Update applications
+  -e, --edit      Open dotfiles directory for editing
+  -h, --help      Show this help message and exit
+
+If no options are provided, usage information is displayed.
+```
+
 ### Local customization
 
 - Create `~/.zshrc.local` for machine-specific Zsh settings
@@ -31,6 +51,7 @@ cd ~/.dotfiles
 - macOS preferences and Homebrew setup
 - Cross-platform compatibility (macOS and Linux)
 - Automatic backup of existing dotfiles
+- [Terminal Setup Guide](./terminal_setup.md)
 
 ## Features
 

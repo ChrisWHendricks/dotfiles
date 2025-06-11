@@ -34,7 +34,7 @@ export VISUAL="code --wait"
 
 # Function to edit files with the editor
 edit() {
-  $EDITOR --wait "$@"
+  $EDITOR  "$@"
 }
 
 # These exports allow my dotfiles repo to be installed in vs code dev containerd

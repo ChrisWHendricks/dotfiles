@@ -85,7 +85,8 @@ while test $# -gt 0; do
 			install_apps
 			;;
 		"-e"|"--edit")
-			code --wait "$dotfilesDirectory"
+			#code --wait "$dotfilesDirectory"
+			$EDITOR "$dotfilesDirectory"
 			exit
 			;;
 		"-h"|"--help")
