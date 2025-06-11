@@ -1,15 +1,7 @@
 # CLI tools for Linux
-brew "gh"
-brew "go"
-brew "zsh"
-brew "ngrok"
-brew "openssl"
-brew "readline"
-brew "sqlite3"
-brew "zlib"
-brew "ruby-install"
-brew "rbenv"
-brew "xz"
 
-# Skip casks as they're macOS-specific
-# Add Linux-specific packages if needed
+
+# Fonts
+cask "font-hack-nerd-font"
+cask "font-fira-code-nerd-font"
+cask "font-jetbrains-mono-nerd-font"

@@ -13,12 +13,14 @@ then
   # Install the correct homebrew for each OS type
   if test "$(uname)" = "Darwin"
   then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # hide output of the install command
+    export HOMEBREW_NO_AUTO_UPDATE=1
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null
   elif test "$(expr substr $(uname -s) 1 5)" = "Linux"
   then
     # Handle the glibc warning by setting HOMEBREW_NO_AUTO_UPDATE
     export HOMEBREW_NO_AUTO_UPDATE=1
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null
     
     # Add Homebrew to PATH for Linux
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
