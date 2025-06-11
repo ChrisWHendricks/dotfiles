@@ -42,6 +42,21 @@ mkdir -p "$BACKUP_DIR"
 success "Created Backup Directory $BACKUP_DIR"
 success "Dotfiles Directory $DOTFILES_DIR"
 
+install_zsh_themes() {
+    echo ''
+    echo '⚡️ Installing ZSH Themes'
+
+    local overwrite_all=false backup_all=false skip_all=false
+
+    for src in $(find -H "$DOTFILES_DIR/zsh/themes" -maxdepth 2 -name '*.zsh-theme' -not -path '*.git*'); do
+        dst="$HOME/.oh-my-zsh/themes/$(basename "${src%.*}")"
+        link_file "$src" "$dst"
+    done
+
+    success "zsh themes installed"
+    echo ''
+}
+
 install_dotfiles() {
     echo ''
     echo '⚡️ Installing Dotfiles'
