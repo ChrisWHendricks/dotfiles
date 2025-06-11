@@ -11,7 +11,8 @@ set -e
 
 parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
-INSTALL_APPS='no'
+
+export ZSH=$HOME/.dotfiles
 
 displayUsageAndExit() {
 	echo "dot -- dotfiles management"
@@ -19,22 +20,76 @@ displayUsageAndExit() {
 	echo "Usage: dot [options]"
 	echo ""
 	echo "Options:"
-	echo "  -e, --edit    Open dotfiles directory for editing"
-	echo "  -h, --help    Show this help message and exit"
+	echo "  --bootstrap     Run the bootstrap script to set up dotfiles"
+	echo "  --homebrew      Install or update Homebrew"
+	echo "  --set-defaults  Set OS specific defaults"
+	echo "  --apps          Install/Update applications"
+	echo "  -e, --edit      Open dotfiles directory for editing"
+	echo "  -h, --help      Show this help message and exit"
+	echo ""
+	echo "If no options are provided, usage information is displayed."
 	exit
 }
 
+# Function to run bootstrap script
+run_bootstrap() {
+	echo "› Running bootstrap script"
+	$ZSH/script/bootstrap
+}
+
+# Function to install/update Homebrew
+install_homebrew() {
+	echo "› Installing/Updating Homebrew"
+	if [ "$(uname -s)" == "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" == "Linux" ] ; then
+		$ZSH/homebrew/install.sh
+		brew update
+	else
+		echo "› Skipping Homebrew installation (unsupported OS)"
+	fi
+}
+
+# Function to set OS defaults
+set_defaults() {
+	echo "› Setting OS defaults"
+	if [ "$(uname -s)" == "Darwin" ] ; then
+		$ZSH/macos/set-defaults.sh
+	else
+		echo "› Skipping defaults (non-macOS system detected)"
+	fi
+}
+
+# Function to install applications
+install_apps() {
+	echo "› Installing/Updating applications"
+	$ZSH/script/install
+}
+
+# If no arguments provided, show usage
+if [ $# -eq 0 ]; then
+	displayUsageAndExit
+fi
+
+# Process arguments
 while test $# -gt 0; do
 	case "$1" in
-		"-h"|"--help")
-			displayUsageAndExit
+		"--bootstrap")
+			run_bootstrap
+			;;
+		"--homebrew")
+			install_homebrew
+			;;
+		"--set-defaults")
+			set_defaults
+			;;
+		"--apps")
+			install_apps
 			;;
 		"-e"|"--edit")
-			exec "$EDITOR" "$dotfilesDirectory"
+			code --wait "$dotfilesDirectory"
 			exit
 			;;
-		"-i"|"--install-apps")
-			INSTALL_APPS='yes'
+		"-h"|"--help")
+			displayUsageAndExit
 			;;
 		*)
 			echo "Invalid option: $1"
@@ -43,22 +98,3 @@ while test $# -gt 0; do
 	esac
 	shift
 done
-
-export ZSH=$HOME/.dotfiles
-
-# Install Homebrew if DARWIN OR LINUX
-echo "› $ZSH/homebrew/install.sh"
-if [ "$(uname -s)" == "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" == "Linux" ] ; then
-	$ZSH/homebrew/install.sh #> /dev/null 2>&1
-	brew update
-else
-	echo "› Skipping Homebrew installation"
-fi
-
-if [ "$(uname -s)" == "Darwin" ] ; then
-	$ZSH/macos/set-defaults.sh
-fi
-
-# Install software
-echo "› $ZSH/script/install"
-$ZSH/script/install

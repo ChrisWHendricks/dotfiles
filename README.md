@@ -7,8 +7,21 @@ My personal dotfiles for macOS and Linux development environments.
 ```bash
 git clone https://github.com/ChrisWHendricks/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./script/bootstrap
+./install.sh
 ```
+
+## Usage
+
+### Managing dotfiles
+
+- **Install**: Run `./install.sh` to create symlinks for all dotfiles
+- **Unlink**: Run `./unlink.sh` to remove all symlinks created by the installer
+- **Edit**: Modify files directly in the `~/.dotfiles` directory, changes will be reflected in your home directory
+
+### Local customization
+
+- Create `~/.zshrc.local` for machine-specific Zsh settings
+- Create `~/.gitconfig.local` for personal Git configuration
 
 ## What's included
 
