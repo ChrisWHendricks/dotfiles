@@ -31,6 +31,7 @@
     cm = !git add -A && git commit -m
     co = checkout
     cob = checkout -b
+    cod = "!f() { git checkout $(git default); }; f"
     # Show list of files in a conflict state.
     conflicts = !git diff --name-only --diff-filter=U
     cp = cherry-pick
@@ -64,6 +65,8 @@
     pr = "!f(){ URL=$(git config remote.origin.url); if [[ \"$(uname)\" == \"Darwin\" ]]; then open ${URL%.git}/compare/$(git rev-parse --abbrev-ref HEAD); else xdg-open ${URL%.git}/compare/$(git rev-parse --abbrev-ref HEAD); fi; }; f"
     publish = "!f() { git push origin $1 && git push drafts :$1 && git browse; }; f"
     pushf = push --force-with-lease --force-if-includes
+    # push and set upstream
+    pushup = "!f() { git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD); }; f"
     rba = rebase --abort
     rbc = "!f(){ git add -A && git rebase --continue; }; f"
     re = "!f(){ DEFAULT=$(git default); git fetch origin && git rebase origin/${1-$DEFAULT}; }; f"

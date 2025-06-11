@@ -135,7 +135,7 @@ install_dotfiles
 
 echo ''
 echo '⚡️ Installing Dependencies'
-if source bin/dot | while read -r data; do info "$data"; done; then
+if $DOTFILES_DIR/bin/dot --homebrew --apps | while read -r data; do info "$data"; done; then
     success "dependencies installed"
 else
     fail "error installing dependencies"

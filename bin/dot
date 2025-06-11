@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # dot
 #
@@ -40,7 +40,7 @@ run_bootstrap() {
 # Function to install/update Homebrew
 install_homebrew() {
 	echo "› Installing/Updating Homebrew"
-	if [ "$(uname -s)" == "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" == "Linux" ] ; then
+	if [ "$(uname -s)" = "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" = "Linux" ] ; then
 		$ZSH/homebrew/install.sh
 		brew update
 	else
@@ -51,7 +51,7 @@ install_homebrew() {
 # Function to set OS defaults
 set_defaults() {
 	echo "› Setting OS defaults"
-	if [ "$(uname -s)" == "Darwin" ] ; then
+	if [ "$(uname -s)" = "Darwin" ] ; then
 		$ZSH/macos/set-defaults.sh
 	else
 		echo "› Skipping defaults (non-macOS system detected)"
