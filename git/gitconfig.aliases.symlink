@@ -82,3 +82,4 @@
     up = !git pull --rebase --prune $@ && git submodule update --init --recursive
     wip = commit -am "WIP"
     wipe = "!f() { rev=$(git rev-parse ${1-HEAD}); git add -A && git commit --allow-empty -qm 'WIPE SAVEPOINT' && git reset $rev --hard; }; f"
+    cwh = "!f(){ echo 'CWH Custom Aliases'; }; f"

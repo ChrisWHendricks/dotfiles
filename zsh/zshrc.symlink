@@ -19,8 +19,8 @@ plugins=(
 # Source the oh-my-zsh script to start using it
 source $ZSH/oh-my-zsh.sh
 
-# Add local paths to the Path variable.  
-# Necessary because some programs (like poetry) can get installed to 
+# Add local paths to the Path variable.
+# Necessary because some programs (like poetry) can get installed to
 # a local path
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
 
@@ -38,8 +38,8 @@ alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
 alias codehome="code ~"
 alias codesrc="code ~/src"
 alias rz="exec zsh" # reload the shell
-alias c="clear"     
-alias cls="clear"   # Too many years on windows and I still type cls sometimes
+alias c="clear"
+alias cls="clear" # Too many years on windows and I still type cls sometimes
 
 # I reference this site so much that I created an alias for open it.
 # Use the appropriate open command based on OS
@@ -49,6 +49,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
   # Linux and others
   alias botodocs='xdg-open "https://boto3.amazonaws.com/v1/documentation/api/latest/index.html"'
+  # Check for Linux Homebrew
+  if [ -d "$HOME/.linuxbrew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  fi
 fi
 
 # Custom functions
@@ -59,11 +63,5 @@ function mkcd() {
 # Load local config if it exists
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
-# This Starts Oh My Zsh
-# Must call this after sourcing local config in case the local config
-# needs to override the theme.
-
-
 echo "Loaded Chris W Hendricks's .zshrc"
 echo "Loaded $ZSH_THEME theme"
-

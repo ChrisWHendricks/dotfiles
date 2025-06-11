@@ -141,66 +141,7 @@ else
     fail "error installing dependencies"
 fi
 
-# If we're on a Mac, let's install and setup homebrew.
-# if [ "$(uname -s)" == "Darwin" ]
-# then
-#     echo ''
-#     echo '⚡️ Installing Macos Dependencies'
-#   if source bin/dot | while read -r data; do info "$data"; done
-#   then
-#     success "dependencies installed"
-#   else
-#     fail "error installing dependencies"
-#   fi
-# fi
-
-# if [ "$(uname -s)" == "Linux" ]
-# then
-#     echo ''
-#     echo '⚡️ Installing Linux Dependencies'
-#   if source bin/dot | while read -r data; do info "$data"; done
-#   then
-#     success "dependencies installed"
-#   else
-#     fail "error installing dependencies"
-#   fi
-# fi
-
 echo ''
 echo '  All installed! Run source ~/.zshrc to reload your shell'
 
-# # Link dotfiles to home directory
-# link_file "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
-# link_file "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
-# link_file "$DOTFILES_DIR/.gitignore_global" "$HOME/.gitignore_global"
-# link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 
-# # Create src directory if it doesn't exist
-# SRC_DIR="$HOME/src"
-# mkdir -p "$SRC_DIR"
-
-# # Link dotfiles to src directory for easy editing
-# echo "Creating links in ~/src for easy editing..."
-# link_file "$DOTFILES_DIR/.zshrc" "$SRC_DIR/.zshrc"
-# link_file "$DOTFILES_DIR/.bashrc" "$SRC_DIR/.bashrc"
-# link_file "$DOTFILES_DIR/.bash_profile" "$SRC_DIR/.bash_profile"
-# link_file "$DOTFILES_DIR/.gitconfig" "$SRC_DIR/.gitconfig"
-# link_file "$DOTFILES_DIR/.gitignore_global" "$SRC_DIR/.gitignore_global"
-# link_file "$DOTFILES_DIR/.tmux.conf" "$SRC_DIR/.tmux.conf"
-
-# # Link VS Code settings if VS Code is installed
-# VSCODE_DIR="$HOME/Library/Application Support/Code/User"
-# if [ -d "$VSCODE_DIR" ]; then
-#     echo "Linking VS Code settings"
-#     mkdir -p "$VSCODE_DIR"
-#     link_file "$DOTFILES_DIR/vscode/settings.json" "$VSCODE_DIR/settings.json"
-# fi
-
-# NOW=$(date +"%Y-%m-%d %H:%M:%S")
-# echo "Completed dotfiles installation at $NOW" >> "$HOME/.dotfiles_installation.log"
-# echo "Backup directory: $BACKUP_DIR" >> "$HOME/.dotfiles_installation.log"
-# echo "Dotfiles directory: $DOTFILES_DIR" >> "$HOME/.dotfiles_installation.log"
-# echo "Dotfiles installation complete!" >> "$HOME/.dotfiles_installation.log"
-# echo "If you want to install additional tools, run: ./install_tools.sh" >> "$HOME/.dotfiles_installation.log"
-
-# cat "$HOME/.dotfiles_installation.log"
