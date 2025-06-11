@@ -49,7 +49,7 @@ install_zsh_themes() {
     local overwrite_all=false backup_all=false skip_all=false
 
     for src in $(find -H "$DOTFILES_DIR/zsh/themes" -maxdepth 2 -name '*.zsh-theme' -not -path '*.git*'); do
-        dst="$HOME/.oh-my-zsh/themes/$(basename "${src%.*}")"
+        dst="$HOME/.oh-my-zsh/custom/themes/$(basename "${src}")"
         link_file "$src" "$dst"
     done
 
