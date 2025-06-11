@@ -25,6 +25,8 @@ then
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     
     # Add to shell profile
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    
     if [ -f ~/.zshrc ]; then
       echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
     fi

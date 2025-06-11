@@ -147,6 +147,7 @@ unlink_file() {
 
 setup_gitconfig
 install_dotfiles
+install_zsh_themes
 
 echo ''
 echo '⚡️ Installing Dependencies'
