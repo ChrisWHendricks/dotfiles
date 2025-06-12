@@ -44,7 +44,7 @@ cwh-prompt-left(){
     local gap="          "
 
     prompt=""
-    prompt+="$LF$LF$(git_prompt) | $(dir_prompt)"
+    prompt+="$(git_prompt) | $(dir_prompt)"
     #echo "${PROMPT_BG}$(dir_prompt)${FX[reset]}"
     echo -e -n $prompt
 }
