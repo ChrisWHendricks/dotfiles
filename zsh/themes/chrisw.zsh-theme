@@ -8,7 +8,7 @@ LF=$'\n'
 GITHUB=$''
 
 cwh-prompt() {
-    echo "$(dir_prompt)$(git_prompt)"
+    echo "$(dir_prompt)$(git_prompt)$(python_version_prompt)"
 }
 
 dir_prompt() {
@@ -21,7 +21,13 @@ dir_prompt() {
 }
 
 python_version_prompt() {
-    echo -n "🐍 "
+    if [[ -z $VIRTUAL_ENV ]]; then
+        echo -n "🐍"
+    else
+        local venv_name=$(basename $VIRTUAL_ENV)
+        echo -n " |%F{42} $venv_name%f$LF"
+    fi
+    
 }
 
 git_prompt(){
