@@ -29,13 +29,18 @@ username_prompt()
 {
     local username=$(whoami)
 
+    # Truncate to 5 char
+    username=${username:0:2}
+
     echo -n -e "$username"
 
 }
 
 cwh-prompt-right() {
-    shell=$(basename $SHELL)
-    echo "⟨ ${PROMPT_BG}$(username_prompt)$(sep)$(prompt_python)${PROMPT_BG}$(sep)$shell 〉${FX[reset]}"
+    #shell=$(basename $SHELL)
+    #echo "⟨ ${PROMPT_BG}$(username_prompt)$(sep)$(prompt_python)${PROMPT_BG}$(sep)$shell 〉${FX[reset]}"
+    prompt="${BG[160]}$(username_prompt)${FX[reset]}${FG[160]}${FX[reset]} "
+    echo -e -n $prompt
 }
 
 cwh-prompt-left(){
@@ -43,8 +48,9 @@ cwh-prompt-left(){
 
     local gap="          "
 
-    prompt=""
-    prompt+="$(git_prompt) | $(dir_prompt)"
+    prompt="${FG[091]}${BG[091]} $(username_prompt) ${FX[reset]}${FG[091]}${FX[reset]} "
+    prompt+="$(git_prompt)"
+    prompt+="$LF$LF$(dir_prompt)"
     #echo "${PROMPT_BG}$(dir_prompt)${FX[reset]}"
     echo -e -n $prompt
 }
@@ -187,6 +193,6 @@ precmd() {
     # shell=$(basename $SHELL)
     # RPROMPT="${FG[082]}$shell${FX[reset]}"
     # RPROMPT="$PROMPT_BG| Current Theme: ${ZSH_THEME} ${FX[reset]}"
-    #RPROMPT=$'%{%f%b%k%}$(cwh-prompt-right)%{%f%b%k%}'
+   # RPROMPT=$'%{%f%b%k%}$(cwh-prompt-right)%{%f%b%k%}'
 
 }
