@@ -1,37 +1,90 @@
 # Enable prompt substitution
 setopt PROMPT_SUBST
 
-SEP1=$'\ue0b1'
+SEP1=" 󰇝 "
+VENV_ICON="󰆧"
 PROMPT_FG=${FG[033]}
+PROMPT_BG=${BG[234]}
 RC=${FX[reset]}
 LF=$'\n'
 GITHUB=$''
 
-cwh-prompt() {
-    echo "$(dir_prompt)$(git_prompt)$(python_version_prompt)"
+function set_color() {
+    local fg_code=$1
+    local bg_code=$2
+    local text=$3
+
+    # if 4t argument this is FX code
+    local fx_code=$4
+
+    local colored_text="${FX[$fx_code]}${FG[${fg_code}]}${BG[${bg_code}]}${text}${FX[reset]}"
+    echo -e "$colored_text"
+}
+
+sep(){
+    set_color 119 "" "$SEP1"
+}
+
+username_prompt()
+{
+    local username=$(whoami)
+
+    echo -n -e "$username"
+
+}
+
+cwh-prompt-right() {
+    shell=$(basename $SHELL)
+    echo "⟨ ${PROMPT_BG}$(username_prompt)$(sep)$(prompt_python)${PROMPT_BG}$(sep)$shell 〉${FX[reset]}"
+}
+
+cwh-prompt-left(){
+
+
+    local gap="          "
+
+    prompt=""
+    prompt+="$LF$LF$(git_prompt) | $(dir_prompt)"
+    #echo "${PROMPT_BG}$(dir_prompt)${FX[reset]}"
+    echo -e -n $prompt
 }
 
 dir_prompt() {
-    local fg="%F{51}"
-    local newPathSep="%F{magenta}  $fg"
+    local fg="${FG[119]}"
+    local bg="%K{51}"
+    
+    icon="󰆧"
+    if [ -n "$VIRTUAL_ENV" ]; then
+        
+       icon="%F{201}$VENV_ICON"
+    else
+       icon="󰉖"
+    fi
     local_dir=$PWD
     local_dir=${local_dir/#$HOME/\~}
 
-    echo -n "${fg}${local_dir}"
+    echo -n -e "${fg}$icon ${local_dir}${fg} 󰅂 "
 }
 
-python_version_prompt() {
-    if [[ -z $VIRTUAL_ENV ]]; then
-        echo -n "🐍"
+
+
+function prompt_python() {
+
+    local python_version=$(python3 --version 2>&1 | awk '{print $2}')
+    if [ -n "$VIRTUAL_ENV" ]; then
+        python_env=$(basename "$VIRTUAL_ENV")
+        fg="%F{201}"
+        bg=$PROMPT_BG
+        echo -n "${fg}${bg} $python_version ($python_env)%F{015}"
     else
-        local venv_name=$(basename $VIRTUAL_ENV)
-        echo -n " |%F{42} $venv_name%f$LF"
+        fg="%F{015}"
+         bg=$PROMPT_BG
+        echo -n "${fg}${bg} $python_version %F{015}"
     fi
-    
 }
 
-git_prompt(){
-        # If in git repo
+git_prompt() {
+    # If in git repo
     if ! $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
         return
     fi
@@ -41,11 +94,11 @@ git_prompt(){
     remote_branch_name=$(git config --get branch.$local_branch.merge | cut -d/ -f3)
 
     gitStatusMsg=$(git_prompt_status)
+    #trim whitespace
+    gitStatusMsg=$(echo $gitStatusMsg | xargs)
 
-
-    echo -e -n " |%F{42} $GITHUB  $local_branch ($remote_branch) $gitStatusMsg%f$LF"
-
-} 
+    echo -e -n "$PROMPT_BG%F{42}$GITHUB $local_branch ($remote_branch) ${gitStatusMsg}" 
+}
 
 git_prompt_status() {
     # Git status indicators with modern symbols
@@ -119,13 +172,21 @@ git_prompt_status() {
         STATUS="$STATUS $ZSH_THEME_GIT_PROMPT_UNTRACKED "
     fi
 
-    echo "$STATUS $RC"
+    # remove extra spaces fron Status
+    STATUS=$(echo $STATUS | xargs)
+    echo -e -n "$STATUS$RC"
 
 }
 
 precmd() {
-    
- user=`whoami`
-  PROMPT=$'$LF%F{165}($USER) %{%f%b%k%}$(cwh-prompt)%{%f%b%k%}$LF%F{119}$ %{%f%b%k%}'
+
+    unset RPROMPT
+    PROMPT=$'$LF%{%f%b%k%}$(cwh-prompt-left)%{%f%b%k%}%F{119}%{%f%b%k%}'
+    #RPROMPT=" $(prompt_python) $(git_prompt)"
+
+    # shell=$(basename $SHELL)
+    # RPROMPT="${FG[082]}$shell${FX[reset]}"
+    # RPROMPT="$PROMPT_BG| Current Theme: ${ZSH_THEME} ${FX[reset]}"
+    #RPROMPT=$'%{%f%b%k%}$(cwh-prompt-right)%{%f%b%k%}'
 
 }
