@@ -21,6 +21,9 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
 
+# Dotfiles CLI (Python) - ensure new dot command takes precedence
+export PATH="$HOME/src/dotfiles/venv/bin:$PATH"
+
 # Preferred editor for local and remote sessions
 export EDITOR='nano'
 
