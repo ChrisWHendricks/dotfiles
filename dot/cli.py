@@ -2,7 +2,7 @@
 
 import click
 from dot import __version__
-from dot.commands import check, install, tools
+from dot.commands import check, config, install, tools
 
 
 @click.group()
@@ -18,6 +18,7 @@ def cli(ctx):
 
 # Register commands
 cli.add_command(check.check)
+cli.add_command(config.config)
 cli.add_command(install.install)
 cli.add_command(tools.tools)
 
