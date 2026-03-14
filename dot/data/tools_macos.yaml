@@ -22,6 +22,12 @@ categories:
       brew: curl
       description: Command line tool for transferring data with URLs
 
+    - name: Claude Code
+      install_method: custom
+      install_command: 'curl -fsSL https://claude.ai/install.sh | bash'
+      check_command: 'command -v claude >/dev/null 2>&1'
+      description: Anthropic's official CLI for Claude AI assistant
+
   cli_tools:
     - name: fzf
       brew: fzf
