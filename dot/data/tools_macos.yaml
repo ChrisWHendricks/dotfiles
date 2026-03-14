@@ -1,0 +1,96 @@
+# macOS tools configuration
+# Organized by category for easier management
+
+package_managers:
+  primary: homebrew
+
+categories:
+  essential:
+    - name: git
+      brew: git
+      description: Distributed version control system
+
+    - name: tmux
+      brew: tmux
+      description: Terminal multiplexer for managing multiple terminal sessions
+
+    - name: wget
+      brew: wget
+      description: Internet file retriever
+
+    - name: curl
+      brew: curl
+      description: Command line tool for transferring data with URLs
+
+  cli_tools:
+    - name: fzf
+      brew: fzf
+      description: Command-line fuzzy finder
+
+    - name: ripgrep
+      brew: ripgrep
+      description: Fast grep alternative written in Rust
+
+    - name: fd
+      brew: fd
+      description: Fast and user-friendly alternative to find
+
+    - name: bat
+      brew: bat
+      description: Cat clone with syntax highlighting and Git integration
+
+    - name: jq
+      brew: jq
+      description: Lightweight command-line JSON processor
+
+    - name: htop
+      brew: htop
+      description: Interactive process viewer
+
+    - name: tree
+      brew: tree
+      description: Display directory tree structure
+
+    - name: exa
+      brew: exa
+      description: Modern replacement for ls
+
+  shell:
+    - name: oh-my-zsh
+      install_method: custom
+      install_command: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
+      check_command: '[ -d "$HOME/.oh-my-zsh" ]'
+      description: Framework for managing Zsh configuration
+
+  applications:
+    - name: Visual Studio Code
+      brew_cask: visual-studio-code
+      description: Free source-code editor made by Microsoft
+
+    - name: iTerm2
+      brew_cask: iterm2
+      description: Terminal emulator for macOS
+
+    - name: Rectangle
+      brew_cask: rectangle
+      description: Window management app
+
+    - name: Alfred
+      brew_cask: alfred
+      description: Application launcher and productivity application
+
+  fonts:
+    - name: Hack Nerd Font
+      brew_cask: font-hack-nerd-font
+      tap: homebrew/cask-fonts
+      description: Nerd Font version of Hack
+
+    - name: Fira Code Nerd Font
+      brew_cask: font-fira-code-nerd-font
+      tap: homebrew/cask-fonts
+      description: Nerd Font version of Fira Code
+
+    - name: JetBrains Mono Nerd Font
+      brew_cask: font-jetbrains-mono-nerd-font
+      tap: homebrew/cask-fonts
+      description: Nerd Font version of JetBrains Mono

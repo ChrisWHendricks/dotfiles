@@ -1,6 +1,22 @@
 #!/bin/bash
 
 # Chris W Hendricks's tools installer
+# DEPRECATED: This script is deprecated. Please use the new 'dot' CLI instead.
+# See README.md for installation instructions.
+
+echo "⚠️  WARNING: This script is deprecated!"
+echo "   Please use the new 'dot' CLI instead:"
+echo ""
+echo "   pip install -e ."
+echo "   dot tools install --all"
+echo ""
+echo "   See README.md for more information."
+echo ""
+read -p "Continue with legacy installer anyway? (y/N) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 0
+fi
 
 set -e
 

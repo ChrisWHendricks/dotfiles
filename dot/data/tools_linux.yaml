@@ -1,0 +1,75 @@
+# Linux tools configuration
+# Organized by category for easier management
+
+package_managers:
+  primary: apt
+
+categories:
+  essential:
+    - name: git
+      apt: git
+      yum: git
+      description: Distributed version control system
+
+    - name: tmux
+      apt: tmux
+      yum: tmux
+      description: Terminal multiplexer for managing multiple terminal sessions
+
+    - name: wget
+      apt: wget
+      yum: wget
+      description: Internet file retriever
+
+    - name: curl
+      apt: curl
+      yum: curl
+      description: Command line tool for transferring data with URLs
+
+  cli_tools:
+    - name: fzf
+      apt: fzf
+      yum: fzf
+      description: Command-line fuzzy finder
+
+    - name: ripgrep
+      apt: ripgrep
+      yum: ripgrep
+      description: Fast grep alternative written in Rust
+
+    - name: fd-find
+      apt: fd-find
+      description: Fast and user-friendly alternative to find
+
+    - name: bat
+      apt: bat
+      description: Cat clone with syntax highlighting and Git integration
+
+    - name: jq
+      apt: jq
+      yum: jq
+      description: Lightweight command-line JSON processor
+
+    - name: htop
+      apt: htop
+      yum: htop
+      description: Interactive process viewer
+
+    - name: tree
+      apt: tree
+      yum: tree
+      description: Display directory tree structure
+
+  shell:
+    - name: oh-my-zsh
+      install_method: custom
+      install_command: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
+      check_command: '[ -d "$HOME/.oh-my-zsh" ]'
+      description: Framework for managing Zsh configuration
+
+  applications:
+    - name: Visual Studio Code
+      install_method: snap
+      snap: code
+      snap_classic: true
+      description: Free source-code editor made by Microsoft

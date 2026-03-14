@@ -1,0 +1,49 @@
+# Dotfiles mapping configuration
+# Maps source files in the repository to their destination locations
+
+dotfiles:
+  # Shell configurations
+  - source: config/shell/.zshrc
+    destination: ~/.zshrc
+    platforms: [macos, linux]
+    description: Zsh shell configuration
+
+  - source: config/shell/.bashrc
+    destination: ~/.bashrc
+    platforms: [macos, linux]
+    description: Bash shell configuration
+
+  - source: config/shell/.bash_profile
+    destination: ~/.bash_profile
+    platforms: [macos, linux]
+    description: Bash profile configuration
+
+  # Git configurations
+  - source: config/git/.gitconfig
+    destination: ~/.gitconfig
+    platforms: [macos, linux]
+    description: Git global configuration
+
+  - source: config/git/.gitignore_global
+    destination: ~/.gitignore_global
+    platforms: [macos, linux]
+    description: Global gitignore patterns
+
+  # Tmux configuration
+  - source: config/tmux/.tmux.conf
+    destination: ~/.tmux.conf
+    platforms: [macos, linux]
+    description: Tmux terminal multiplexer configuration
+
+  # VS Code settings
+  - source: config/vscode/settings.json
+    destination: ~/Library/Application Support/Code/User/settings.json
+    platforms: [macos]
+    condition: vscode_installed
+    description: VS Code user settings (macOS)
+
+  - source: config/vscode/settings.json
+    destination: ~/.config/Code/User/settings.json
+    platforms: [linux]
+    condition: vscode_installed
+    description: VS Code user settings (Linux)
