@@ -1,0 +1,43 @@
+# Shell aliases
+# Chris W Hendricks
+
+# Configuration shortcuts
+alias zshconfig="$EDITOR ~/.zshrc"
+alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
+alias aliases="$EDITOR ~/.zsh_aliases"
+
+# Enhanced ls
+alias ls="ls -G"
+alias ll="ls -la"
+alias la="ls -A"
+alias l="ls -CF"
+
+# Git shortcuts
+alias g="git"
+alias gs="git status"
+alias gc="git commit"
+alias gp="git push"
+alias gl="git log --oneline --graph --decorate"
+alias gd="git diff"
+alias ga="git add"
+alias gco="git checkout"
+
+# Directory navigation
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+# Dotfiles management
+alias dotfiles="cd ~/src/dotfiles"
+alias dotinstall="dot install"
+alias dotcheck="dot check"
+
+# Common commands
+alias c="clear"
+alias h="history"
+alias path='echo -e ${PATH//:/\\n}'
+
+# Safety nets
+alias rm="rm -i"
+alias cp="cp -i"
+alias mv="mv -i"

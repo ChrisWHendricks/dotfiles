@@ -4,17 +4,19 @@
 export ZSH="$HOME/.oh-my-zsh"
 
 # Theme
-ZSH_THEME="robbyrussell"
+ZSH_THEME="chw-detailed" # Default theme
 
 # Plugins
-plugins=(
-  git
-  macos
-  docker
-  npm
-  node
-  vscode
-)
+plugins=()
+
+# plugins=(
+#   git
+#   macos
+#   docker
+#   npm
+#   node
+#   vscode
+# )
 
 source $ZSH/oh-my-zsh.sh
 
@@ -27,15 +29,8 @@ export PATH="$HOME/src/dotfiles/venv/bin:$PATH"
 # Preferred editor for local and remote sessions
 export EDITOR='nano'
 
-# Aliases
-alias zshconfig="$EDITOR ~/.zshrc"
-alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
-alias ls="ls -G"
-alias ll="ls -la"
-alias g="git"
-alias gs="git status"
-alias gc="git commit"
-alias gp="git push"
+# Load aliases
+[[ -f ~/.zsh_aliases ]] && source ~/.zsh_aliases
 
 # Custom functions
 function mkcd() {

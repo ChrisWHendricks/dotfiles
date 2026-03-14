@@ -18,6 +18,11 @@ dotfiles:
     platforms: [macos, linux]
     description: Bash profile configuration
 
+  - source: config/shell/.zsh_aliases
+    destination: ~/.zsh_aliases
+    platforms: [macos, linux]
+    description: Zsh aliases
+
   # Git configurations
   - source: config/git/.gitconfig
     destination: ~/.gitconfig
