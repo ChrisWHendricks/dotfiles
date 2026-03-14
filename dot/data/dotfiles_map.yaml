@@ -29,6 +29,16 @@ dotfiles:
     platforms: [macos, linux]
     description: Git global configuration
 
+  - source: config/git/.gitconfig.aliases
+    destination: ~/.gitconfig.aliases
+    platforms: [macos, linux]
+    description: Git aliases
+
+  - source: config/git/.gitconfig.aliases-conventional-commit
+    destination: ~/.gitconfig.aliases-conventional-commit
+    platforms: [macos, linux]
+    description: Git conventional commit aliases
+
   - source: config/git/.gitignore_global
     destination: ~/.gitignore_global
     platforms: [macos, linux]

@@ -1,0 +1,312 @@
+#
+# Conventional Commit Aliases for Git
+# Include this in your .gitconfig with:
+# [include]
+#    path = ~/.gitconfig.aliases-conventional-commit
+#
+
+[alias]
+    #
+    # CONVENTIONAL COMMIT ALIAS UTILITIES
+    #
+    view-cc-aliases = "!f() { \
+        echo \"Conventional Commit Aliases:\"; \
+        for alias in feat fix docs style refactor perf test build ci chore revert cz cam get-ticket-id; do \
+            echo \"\n$alias:\"; \
+            git config --get alias.$alias; \
+        done; \
+    }; f"
+
+    #
+    # TICKET EXTRACTION
+    #
+
+    # Helper function to extract ticket number from branch name
+    # Branch pattern: feat/jedi-1234 -> JEDI-1234
+    get-ticket-id = "!f() { \
+        branch=$(git rev-parse --abbrev-ref HEAD); \
+        case \"$branch\" in \
+            feat/*|fix/*|docs/*|style/*|refactor/*|perf/*|test/*|build/*|ci/*|chore/*|revert/*) \
+                ticket=$(echo \"$branch\" | cut -d'/' -f2 | tr '[:lower:]' '[:upper:]'); \
+                if echo \"$ticket\" | grep -q -E '^[A-Za-z]+-[0-9]+$'; then \
+                    echo \"$ticket\"; \
+                else \
+                    echo \"\"; \
+                fi \
+                ;; \
+            *) \
+                echo \"\" \
+                ;; \
+        esac; \
+    }; f"
+
+    #
+    # INTERACTIVE CONVENTIONAL COMMIT
+    #
+
+    # Interactive conventional commit - prompts for commit type, scope, and message
+    cz = "!f() { \
+        echo 'Select commit type:'; \
+        echo '1) feat: A new feature'; \
+        echo '2) fix: A bug fix'; \
+        echo '3) docs: Documentation only changes'; \
+        echo '4) style: Changes that do not affect the meaning of the code'; \
+        echo '5) refactor: A code change that neither fixes a bug nor adds a feature'; \
+        echo '6) perf: A code change that improves performance'; \
+        echo '7) test: Adding missing tests or correcting existing tests'; \
+        echo '8) build: Changes that affect the build system or external dependencies'; \
+        echo '9) ci: Changes to CI configuration files and scripts'; \
+        echo '10) chore: Other changes that do not modify src or test files'; \
+        echo '11) revert: Reverts a previous commit'; \
+        read -p 'Enter number (1-11): ' typenum; \
+        case $typenum in \
+            1) type='feat';; \
+            2) type='fix';; \
+            3) type='docs';; \
+            4) type='style';; \
+            5) type='refactor';; \
+            6) type='perf';; \
+            7) type='test';; \
+            8) type='build';; \
+            9) type='ci';; \
+            10) type='chore';; \
+            11) type='revert';; \
+            *) echo 'Invalid selection'; return 1;; \
+        esac; \
+        read -p 'Enter scope (optional, press enter to skip): ' scope; \
+        if [ -n \"$scope\" ]; then \
+            scope=\"($scope)\"; \
+        fi; \
+        read -p 'Enter commit message: ' message; \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$ticket\" ]; then \
+            git commit -m \"$ticket: $type$scope: $message\"; \
+        else \
+            git commit -m \"$type$scope: $message\"; \
+        fi; \
+    }; f"
+
+    #
+    # COMMIT TYPE ALIASES
+    #
+
+    # Commit with feat type
+    feat = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: feat($1): $2\"; \
+            else \
+                git commit -m \"feat($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: feat: $1\"; \
+            else \
+                git commit -m \"feat: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with fix type
+    fix = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: fix($1): $2\"; \
+            else \
+                git commit -m \"fix($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: fix: $1\"; \
+            else \
+                git commit -m \"fix: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with docs type
+    docs = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: docs($1): $2\"; \
+            else \
+                git commit -m \"docs($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: docs: $1\"; \
+            else \
+                git commit -m \"docs: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with style type
+    style = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: style($1): $2\"; \
+            else \
+                git commit -m \"style($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: style: $1\"; \
+            else \
+                git commit -m \"style: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with refactor type
+    refactor = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: refactor($1): $2\"; \
+            else \
+                git commit -m \"refactor($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: refactor: $1\"; \
+            else \
+                git commit -m \"refactor: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with perf type
+    perf = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: perf($1): $2\"; \
+            else \
+                git commit -m \"perf($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: perf: $1\"; \
+            else \
+                git commit -m \"perf: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with test type
+    test = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: test($1): $2\"; \
+            else \
+                git commit -m \"test($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: test: $1\"; \
+            else \
+                git commit -m \"test: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with build type
+    build = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: build($1): $2\"; \
+            else \
+                git commit -m \"build($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: build: $1\"; \
+            else \
+                git commit -m \"build: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with ci type
+    ci = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: ci($1): $2\"; \
+            else \
+                git commit -m \"ci($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: ci: $1\"; \
+            else \
+                git commit -m \"ci: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with chore type
+    chore = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: chore($1): $2\"; \
+            else \
+                git commit -m \"chore($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: chore: $1\"; \
+            else \
+                git commit -m \"chore: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    # Commit with revert type
+    revert = "!f() { \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$2\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: revert($1): $2\"; \
+            else \
+                git commit -m \"revert($1): $2\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: revert: $1\"; \
+            else \
+                git commit -m \"revert: $1\"; \
+            fi; \
+        fi; \
+    }; f"
+
+    #
+    # STAGE & COMMIT HELPERS
+    #
+
+    # Stage all changes and commit with conventional commit format
+    cam = "!f() { \
+        git add -A && \
+        ticket=$(git get-ticket-id); \
+        if [ -n \"$3\" ]; then \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: $1($2): $3\"; \
+            else \
+                git commit -m \"$1($2): $3\"; \
+            fi; \
+        else \
+            if [ -n \"$ticket\" ]; then \
+                git commit -m \"$ticket: $1: $2\"; \
+            else \
+                git commit -m \"$1: $2\"; \
+            fi; \
+        fi; \
+    }; f"

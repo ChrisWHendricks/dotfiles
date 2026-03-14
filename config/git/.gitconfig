@@ -1,29 +1,56 @@
 [user]
     name = Chris W Hendricks
     email = <email>
+    signingkey = 802FDE93FFEC43A7
 
 [core]
-    editor = nano
+    editor = code --wait
     excludesfile = ~/.gitignore_global
     autocrlf = input
 
 [color]
-    ui = auto
+    diff = auto
+    status = auto
+    branch = auto
+    ui = true
 
-[alias]
-    st = status
-    ci = commit
-    co = checkout
-    br = branch
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    unstage = reset HEAD --
-    last = log -1 HEAD
+[credential]
+    helper = osxkeychain
+
+[commit]
+    gpgsign = true
+
+[gpg]
+    program = gpg
+
+[difftool]
+    prompt = false
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[mergetool]
+    keepBackup = false
+
+[pager]
+    branch = false
+
+[rerere]
+    enabled = true
 
 [pull]
-    rebase = false
+    rebase = true
+
+[rebase]
+    autostash = true
+    autosquash = true
 
 [init]
     defaultBranch = main
 
 [include]
     path = ~/.gitconfig.local
+    path = ~/.gitconfig.aliases

@@ -1,0 +1,166 @@
+#
+# Git Aliases Configuration
+# Include this in your .gitconfig with:
+# [include]
+#    path = ~/.gitconfig.aliases
+#
+
+[include]
+    path = ~/.gitconfig.aliases-conventional-commit
+
+[alias]
+    #
+    # ALIAS MANAGEMENT & UTILITIES
+    #
+    aliases = "!git config -l | grep ^alias\\. | cut -c 7-"
+    pretty-aliases = "!f() { git config -l | grep ^alias\\. | cut -c 7- | sort | awk -F= '{ command=$2; name=$1; if (length(command) > 80) command=substr(command, 1, 77) \"...\"; printf \"\\033[0;33m%-15s\\033[0m %s\\n\", name, command }'; }; f"
+    show-alias = "!f() { alias=$1; if [ -z \"$alias\" ]; then echo \"Usage: git show-alias <alias-name>\"; else cmd=$(git config --get alias.$alias); echo \"$alias = $cmd\" | sed 's/!f() { /\\n/' | sed 's/; f$//' | sed 's/\\\\$//' | sed 's/;/;\\n/g' | sed 's/{/{\\n/g' | sed 's/}/\\n}/g'; fi; }; f"
+    ec = config --global -e
+
+    #
+    # BASIC SHORTCUTS
+    #
+    st = status -s
+    co = checkout
+    cob = checkout -b
+    # check out feat
+    cof = "!f() { git checkout $(git default); git pull; git checkout -b feat/$1; }; f"
+    cm = !git add -A && git commit -m
+    amend = commit -a --amend
+    unstage = reset -q HEAD --
+    discard = checkout --
+    cp = cherry-pick
+    latest = "!git ll -1"
+
+    #
+    # FIXUP COMMIT UTILITIES
+    #
+    # Get the latest commit that is not a fixup commit
+    latest-non-fixup = "!f() { git log --pretty=%H --grep=\"^fixup\\|^squash\" --invert-grep -n 1; }; f"
+    # Show the latest non-fixup commit with details
+    show-latest-non-fixup = "!f() { commit=$(git latest-non-fixup); if [ -n \"$commit\" ]; then git show $commit; else echo \"No non-fixup commits found\"; fi; }; f"
+    # Create a fixup commit for the latest non-fixup commit
+    fixup = "!f() { commit=$(git latest-non-fixup); if [ -n \"$commit\" ]; then git add -A && git commit --fixup=$commit; else echo \"No non-fixup commit found to fixup\"; fi; }; f"
+
+    #
+    # JIRA & ISSUE TRACKING
+    #
+    # Open the Jira ticket URL for the current branch
+    jira = "!sh -c 'ticket=$(git get-ticket-id); if [ -z \"$ticket\" ]; then echo \"No ticket ID found in branch name\"; exit 1; fi; jira_url=$(printenv JIRA_PLATFORM_URL); if [ -z \"$jira_url\" ]; then echo \"JIRA_PLATFORM_URL not set\"; exit 1; fi; [ \"${jira_url: -1}\" != \"/\" ] && jira_url=\"${jira_url}/\"; if ! echo \"$jira_url\" | grep -q \"/browse/$\"; then jira_url=\"${jira_url}browse/\"; fi; full_url=\"${jira_url}${ticket}\"; echo \"Opening: $full_url\"; if [ \"$(uname)\" = \"Darwin\" ]; then open \"$full_url\"; else xdg-open \"$full_url\"; fi'"
+
+    # Show the current Jira Platform URL
+    jira-url = "!sh -c 'jira_url=$(printenv JIRA_PLATFORM_URL); if [ -z \"$jira_url\" ]; then echo \"JIRA_PLATFORM_URL not set\"; else echo \"Current Jira URL: $jira_url\"; fi'"
+
+    #
+    # BRANCH MANAGEMENT
+    #
+    branches = branch -a
+    default = !git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
+    delete = branch -d
+    cod = "!f() { git checkout $(git default); }; f"
+    gone = "!git for-each-ref --format='%(refname:short) %(upstream:track)' refs/heads/ | awk '$2 == \"[gone]\" { print $1 }'"
+    # Deletes all branches merged into the specified branch (or the default branch if no branch is specified)
+    bclean-local = "!f() { DEFAULT=$(git default); git branch --merged ${1-$DEFAULT} | grep -v " ${1-$DEFAULT}$" | xargs git branch -d; }; f"
+    bclean = "!gh poi && git bclean-local"
+    # Switches to specified branch (or the dafult branch if no branch is specified), runs git up, then runs bclean.
+    bdone = "!f() { DEFAULT=$(git default); git checkout ${1-$DEFAULT} && git up && git bclean; }; f"
+    # Switches to specified branch, runs git up, then runs bclean-squash for squash-merged branches
+    bdone-squash = "!f() { DEFAULT=$(git default); git checkout ${1-$DEFAULT} && git up && git bclean-squash ${1-$DEFAULT}; }; f"
+    # Moves a set of commits from the current branch to another
+    migrate = "!f(){ DEFAULT=$(git default); CURRENT=$(git symbolic-ref --short HEAD); git checkout -b $1 && git branch --force $CURRENT ${3-$CURRENT@{u}} && git rebase --onto ${2-$DEFAULT} $CURRENT; }; f"
+
+    #
+    # REBASE & MERGE OPERATIONS
+    #
+    abort = rebase --abort
+    rba = rebase --abort
+    rbc = "!f(){ git add -A && git rebase --continue; }; f"
+    re = "!f(){ DEFAULT=$(git default); git fetch origin && git rebase origin/${1-$DEFAULT}; }; f"
+    ri = "!f(){ DEFAULT=$(git default); git fetch origin && git rebase --interactive origin/${1-$DEFAULT}; }; f"
+    conflicts = !git diff --name-only --diff-filter=U
+
+    #
+    # REMOTE OPERATIONS
+    #
+    remotes = remote -v
+    up = !git pull --rebase --prune $@ && git submodule update --init --recursive
+    sync = !git pull --rebase && git push
+    fp = "!p() { CURRENT_BRANCH=$(git branch --show-current); git push --force-with-lease --force-if-includes origin +$CURRENT_BRANCH ; }; p"
+    pushf = push --force-with-lease --force-if-includes
+    pushup = "!f() { git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD); }; f"
+    publish = "!f() { git push origin $1 && git push drafts :$1 && git browse; }; f"
+    set-origin = remote set-url origin
+    set-upstream = remote set-url upstream
+
+    #
+    # BROWSER INTEGRATION
+    #
+    browse = !git open
+    open = "!f() { \
+        URL=$(git config remote.origin.url); \
+        if echo \"$URL\" | grep -q \"^git@\"; then \
+            domain=$(echo \"$URL\" | sed -E \"s/git@([^:]+):.*/\\1/\"); \
+            repo_path=$(echo \"$URL\" | sed -E \"s/git@[^:]+:(.*)/\\1/\"); \
+            URL=\"https://$domain/$repo_path\"; \
+        fi; \
+        URL=${URL%.git}; \
+        if [ \"$(uname)\" = \"Darwin\" ]; then \
+            open \"$URL\"; \
+        else \
+            xdg-open \"$URL\"; \
+        fi; \
+    }; f"
+    pr = "!f() { \
+        URL=$(git config remote.origin.url); \
+        if echo \"$URL\" | grep -q \"^git@\"; then \
+            domain=$(echo \"$URL\" | sed -E \"s/git@([^:]+):.*/\\1/\"); \
+            repo_path=$(echo \"$URL\" | sed -E \"s/git@[^:]+:(.*)/\\1/\"); \
+            URL=\"https://$domain/$repo_path\"; \
+        fi; \
+        URL=${URL%.git}; \
+        branch=$(git rev-parse --abbrev-ref HEAD); \
+        URL=\"$URL/compare/$branch\"; \
+        if [ \"$(uname)\" = \"Darwin\" ]; then \
+            open \"$URL\"; \
+        else \
+            xdg-open \"$URL\"; \
+        fi; \
+    }; f"
+
+    #
+    # REPOSITORY SETUP & MANAGEMENT
+    #
+    new = !git init && git symbolic-ref HEAD refs/heads/main
+    cleanup = clean -xdf -e *.DotSettings* -e s3_keys.ps1
+
+    #
+    # STASHING & TEMPORARY SAVES
+    #
+    stashes = stash list
+    save = !git add -A && git commit -m 'SAVEPOINT'
+    wip = commit -am "WIP"
+    undo = reset HEAD~1 --mixed
+    restore = "!f(){ git add -A && git commit -qm 'RESTORE SAVEPOINT'; git reset $1 --hard; }; f"
+    wipe = "!f() { rev=$(git rev-parse ${1-HEAD}); git add -A && git commit --allow-empty -qm 'WIPE SAVEPOINT' && git reset $rev --hard; }; f"
+
+    #
+    # FILE & COMMIT INSPECTION
+    #
+    files = "!f() { git diff-tree --no-commit-id --name-only -r ${1-HEAD}; }; f"
+    find = "!git ls-files | grep -i"
+    churn = !git --no-pager log --name-only --oneline | grep -v ' ' | sort | uniq -c | sort -nr | head
+
+    #
+    # GIT LOG
+    #
+    graph = log --graph -10 --branches --remotes --tags  --format=format:'%Cgreen%h %Creset• %<(75,trunc)%s (%cN, %cr) %Cred%d' --date-order
+    grep = grep -Ii
+    hist = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+    history = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+    # Shows the commit message and files changed from the latest commit
+    ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+    lost = fsck --lost-found
+    # A better git log.
+    ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+    ls-subtrees = !"git log | grep git-subtree-dir | awk '{ print $2 }'"

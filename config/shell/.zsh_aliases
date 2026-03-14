@@ -36,8 +36,11 @@ alias dotcheck="dot check"
 alias c="clear"
 alias h="history"
 alias path='echo -e ${PATH//:/\\n}'
+alias rz="exec zsh" # reload the shell
+alias cls="clear" # Too many years on windows and I still type cls sometimes
 
 # Safety nets
 alias rm="rm -i"
 alias cp="cp -i"
 alias mv="mv -i"
+
