@@ -4,6 +4,37 @@ Modern CLI tool for managing personal dotfiles and development environment on ma
 
 ## Quick Start
 
+### Brand New Machine (Bootstrap)
+
+If you're setting up a brand new machine without Python or other prerequisites:
+
+```bash
+# Clone the repository
+git clone https://github.com/ChrisWHendricks/dotfiles.git ~/src/dotfiles
+cd ~/src/dotfiles
+
+# Run bootstrap script (installs Homebrew, Python, Git, sets up venv)
+./bootstrap.sh
+
+# Install dotfiles
+dot install
+
+# Verify installation
+dot check
+```
+
+The bootstrap script will automatically:
+- Install Homebrew (macOS) or update apt (Linux)
+- Install Git if not present
+- Install Python 3.9+ if not present or too old
+- Create and configure a virtual environment
+- Install the `dot` CLI tool
+- Add the CLI to your PATH
+
+### Existing Machine (Manual Setup)
+
+If you already have Python 3.9+ installed:
+
 ```bash
 # Clone the repository
 git clone https://github.com/ChrisWHendricks/dotfiles.git ~/src/dotfiles
