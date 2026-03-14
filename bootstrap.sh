@@ -188,6 +188,12 @@ update_shell_config() {
         return
     fi
 
+    # Ensure shell config file exists
+    if [[ ! -f "$shell_config" ]]; then
+        print_info "Creating $shell_config..."
+        touch "$shell_config"
+    fi
+
     # Check if PATH already includes venv
     local venv_path="$dotfiles_dir/venv/bin"
     if grep -q "$venv_path" "$shell_config" 2>/dev/null; then
