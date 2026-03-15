@@ -103,6 +103,28 @@ install_git() {
     fi
 }
 
+# Install Zsh
+install_zsh() {
+    if ! command_exists zsh; then
+        print_info "Installing Zsh..."
+        if [[ "$OS" == "macos" ]]; then
+            brew install zsh
+        else
+            sudo apt-get install -y zsh
+        fi
+        print_success "Zsh installed"
+
+        # Offer to change default shell
+        print_info "Zsh installed at: $(which zsh)"
+        print_warning "To set Zsh as your default shell, run:"
+        echo ""
+        echo "    chsh -s $(which zsh)"
+        echo ""
+    else
+        print_success "Zsh already installed ($(zsh --version))"
+    fi
+}
+
 # Install Python 3
 install_python() {
     local python_cmd=""
@@ -117,6 +139,12 @@ install_python() {
         # Check if version is 3.9 or higher
         if [[ "$major" -ge 3 ]] && [[ "$minor" -ge 9 ]]; then
             print_success "Python $python_version already installed"
+
+            # On Linux, ensure python3-venv is installed for the current Python version
+            if [[ "$OS" == "linux" ]]; then
+                ensure_venv_package
+            fi
+
             return 0
         else
             print_warning "Python $python_version is installed but version 3.9+ is required"
@@ -129,7 +157,8 @@ install_python() {
         brew install python@3
         print_success "Python installed via Homebrew"
     else
-        sudo apt-get install -y python3 python3-pip python3-venv
+        sudo apt-get install -y python3 python3-pip
+        ensure_venv_package
         print_success "Python installed via apt"
     fi
 
@@ -140,6 +169,31 @@ install_python() {
     else
         print_error "Python installation failed"
         exit 1
+    fi
+}
+
+# Ensure the correct python3-venv package is installed on Linux
+ensure_venv_package() {
+    if [[ "$OS" != "linux" ]]; then
+        return 0
+    fi
+
+    # Get the Python version (e.g., "3.12.1" -> "3.12")
+    local py_version=$(python3 --version 2>&1 | awk '{print $2}' | cut -d. -f1,2)
+    local venv_package="python${py_version}-venv"
+
+    print_info "Checking for $venv_package..."
+
+    # Check if the version-specific venv package exists
+    if apt-cache show "$venv_package" >/dev/null 2>&1; then
+        print_info "Installing $venv_package..."
+        sudo apt-get install -y "$venv_package"
+        print_success "$venv_package installed"
+    else
+        # Fallback to generic python3-venv
+        print_warning "$venv_package not found, installing python3-venv..."
+        sudo apt-get install -y python3-venv
+        print_success "python3-venv installed"
     fi
 }
 
@@ -228,6 +282,7 @@ main() {
     fi
 
     install_git
+    install_zsh
     install_python
 
     # Setup Python environment
