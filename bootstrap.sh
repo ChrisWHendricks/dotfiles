@@ -103,7 +103,7 @@ install_git() {
     fi
 }
 
-# Install Zsh
+# Install Zsh and make it the user's default login shell
 install_zsh() {
     if ! command_exists zsh; then
         print_info "Installing Zsh..."
@@ -113,15 +113,25 @@ install_zsh() {
             sudo apt-get install -y zsh
         fi
         print_success "Zsh installed"
-
-        # Offer to change default shell
-        print_info "Zsh installed at: $(which zsh)"
-        print_warning "To set Zsh as your default shell, run:"
-        echo ""
-        echo "    chsh -s $(which zsh)"
-        echo ""
     else
         print_success "Zsh already installed ($(zsh --version))"
+    fi
+
+    local zsh_path
+    zsh_path="$(command -v zsh)"
+
+    if [[ "$SHELL" == "$zsh_path" ]]; then
+        print_success "Zsh is already the default shell"
+        return
+    fi
+
+    print_info "Setting Zsh as the default shell ($zsh_path)..."
+    if chsh -s "$zsh_path"; then
+        print_success "Default shell changed to Zsh"
+        print_warning "Log out and back in for the shell change to take effect"
+    else
+        print_warning "Could not change the default shell automatically"
+        print_warning "Run this command manually: chsh -s $zsh_path"
     fi
 }
 
@@ -232,8 +242,9 @@ update_shell_config() {
     local dotfiles_dir="$1"
     local shell_config=""
 
-    # Determine shell config file
-    if [[ -n "$ZSH_VERSION" ]] || [[ "$SHELL" == *"zsh"* ]]; then
+    # Bootstrap standardizes on Zsh. Use .zshrc even when this script was
+    # launched from Bash, because $SHELL is not updated until the next login.
+    if command_exists zsh; then
         shell_config="$HOME/.zshrc"
     elif [[ -n "$BASH_VERSION" ]] || [[ "$SHELL" == *"bash"* ]]; then
         shell_config="$HOME/.bashrc"
