@@ -75,7 +75,7 @@ categories:
 
   applications:
     - name: Visual Studio Code
-      install_method: snap
-      snap: code
-      snap_classic: true
+      install_method: custom
+      install_script: scripts/install_vscode_linux.sh
+      check_command: 'command -v code >/dev/null 2>&1'
       description: Free source-code editor made by Microsoft
