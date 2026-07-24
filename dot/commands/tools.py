@@ -1,6 +1,8 @@
 """Tools command for managing development tools and applications."""
 
+import shlex
 import subprocess
+from pathlib import Path
 from typing import Dict, List, Optional
 
 import click
@@ -118,8 +120,18 @@ class ToolManager:
         install_method = tool.get("install_method")
         if install_method == "custom":
             install_cmd = tool.get("install_command")
+            install_script = tool.get("install_script")
+
+            if install_script:
+                repo_root = Path(__file__).resolve().parents[2]
+                script_path = repo_root / install_script
+                if not script_path.is_file():
+                    print_error(f"Install script not found for {name}: {script_path}")
+                    return False
+                install_cmd = f"bash {shlex.quote(str(script_path))}"
+
             if not install_cmd:
-                print_error(f"No install command for {name}")
+                print_error(f"No install command or script for {name}")
                 return False
 
             print_info(f"Installing {name}...")
